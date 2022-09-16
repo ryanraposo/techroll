@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { User, Post, Comment } = require('../../models');
 
-// get all users
+// Get all users
 router.get('/', (req, res) => {
   User.findAll({
     attributes: { exclude: ['password'] }
@@ -13,6 +13,7 @@ router.get('/', (req, res) => {
     });
 });
 
+// Get a user by id
 router.get('/:id', (req, res) => {
   User.findOne({
     attributes: { exclude: ['password'] },
@@ -22,7 +23,7 @@ router.get('/:id', (req, res) => {
     include: [
       {
         model: Post,
-        attributes: ['id', 'title', 'post_url', 'created_at']
+        attributes: ['id', 'title', 'text', 'created_at']
       },
       {
         model: Comment,
@@ -31,12 +32,6 @@ router.get('/:id', (req, res) => {
           model: Post,
           attributes: ['title']
         }
-      },
-      {
-        model: Post,
-        attributes: ['title'],
-        through: Vote,
-        as: 'voted_posts'
       }
     ]
   })
@@ -53,6 +48,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// Create a user
 router.post('/', (req, res) => {
   // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
   User.create({
@@ -75,6 +71,7 @@ router.post('/', (req, res) => {
     });
 });
 
+// Login
 router.post('/login', (req, res) => {
   // expects {email: 'lernantino@gmail.com', password: 'password1234'}
   User.findOne({
@@ -104,6 +101,7 @@ router.post('/login', (req, res) => {
   });
 });
 
+// Logout
 router.post('/logout', (req, res) => {
   if (req.session.loggedIn) {
     req.session.destroy(() => {
@@ -115,6 +113,7 @@ router.post('/logout', (req, res) => {
   }
 });
 
+// Edit a user
 router.put('/:id', (req, res) => {
   // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
 
@@ -138,6 +137,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
+// Delete a user
 router.delete('/:id', (req, res) => {
   User.destroy({
     where: {
@@ -156,5 +156,6 @@ router.delete('/:id', (req, res) => {
       res.status(500).json(err);
     });
 });
+
 
 module.exports = router;
