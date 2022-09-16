@@ -1,5 +1,10 @@
-# techroll
-CMS-style blog site
+# TechRoll
+
+A CMS-style blog site.
+
+## Screenshot
+
+![](img/ss-1.png)
 
 ## Link
 
